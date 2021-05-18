@@ -1,7 +1,7 @@
 import React from 'react';
 import './Appx/Appx.css';
 import Api from "./../Services/Api";
-import RegChild from "./RegChild";
+import { withRouter } from "react-router-dom";
 const url1="https://api.backendless.com/D061D8C7-065D-4B3D-8B16-AE75A02E6CA1/5F67E8A5-ED93-4164-B613-65C075D89BF0/users/register";
 class Registration extends React.Component {
     constructor(props) {
@@ -11,18 +11,12 @@ class Registration extends React.Component {
             userInput3: '',
             showPassword: false ,
             disableButton: false,
-            gotoLogin: false
         }
         this.handleChange2 = this.handleChange2.bind(this);
         this.handleChange3 = this.handleChange3.bind(this);
         this.handleSubmit2 = this.handleSubmit2.bind(this);
         this.loginPage = this.loginPage.bind(this);
         this.register = this.register.bind(this);
-    }
-    componentDidMount() {
-        this.setState({
-            gotoLogin: false 
-        });
     }
     handleChange2(event) {
         this.setState({
@@ -49,10 +43,10 @@ class Registration extends React.Component {
     }
     loginPage(){
         this.setState({
-            gotoLogin: true,
             userInput2: '',
             userInput3: ''
         });
+        this.props.history.push("/");
     }
     register(){
         if(this.state.userInput2==='' && this.state.userInput3===''){
@@ -78,11 +72,11 @@ class Registration extends React.Component {
                 if(res.objectId){
                     alert("Registration successful"); 
                     this.setState({
-                        gotoLogin: true,
                         userInput2: '',
                         userInput3: '',
                         disableButton: false
                     })
+                    this.props.history.push("/");
                 }
                 else{
                     alert("Registration unsuccessful"); 
@@ -114,7 +108,6 @@ class Registration extends React.Component {
         
         return (
             <div>
-                {this.state.gotoLogin ? <div><RegChild/></div> :
                     <div>
                         <div className="Appx2">
                         <h1>Register to Your Account</h1>
@@ -150,11 +143,10 @@ class Registration extends React.Component {
                                 </div>
                             </div>
                         </div>
-                    </div> }
+                    </div>
             </div>
         );
     }
 }
-export default Registration;
 
-
+export default withRouter(Registration);
